@@ -50,8 +50,13 @@ public class UserServiceImpl implements UserService {
 		}
 		user.setRoles(Arrays.asList(role));
 		userRepository.save(user);
+		
 	}
-
+	@Override
+	public void deleteUser(User user) {
+		// TODO Auto-generated method stub
+		userRepository.delete(user);
+	}
 	@Override
 	public List<UserDto> findAllUsers() {
 		// TODO Auto-generated method stub

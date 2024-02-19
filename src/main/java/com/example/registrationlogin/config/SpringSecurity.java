@@ -40,6 +40,8 @@ public class SpringSecurity  {
 		.requestMatchers("/index").permitAll()
 		.requestMatchers("/deleteUser").hasRole("ADMIN")
 		.requestMatchers("/deleteUser/delete").hasRole("ADMIN")
+		.requestMatchers("/updateUser").hasRole("ADMIN")
+		.requestMatchers("/updateUser/update").hasRole("ADMIN")
 		.requestMatchers("/users").hasRole("ADMIN")
 				).formLogin(
 						

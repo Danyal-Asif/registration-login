@@ -41,7 +41,7 @@
 <td class="text-center" th:text="${user.firstName}"></td>
 <td class="text-center" th:text="${user.lastName}"></td>
 <td class="text-center" th:text="${user.email}"></td>
-<td class="d-flex justify-content-center gap-3"><a class="btn btn-secondary" th:href="@{#}">Edit</a><a class="btn btn-danger" th:href="@{'/deleteUser?email=' + ${user.email}}">Delete</a></td>
+<td class="d-flex justify-content-center gap-3"><a class="btn btn-secondary" th:href="@{'/updateUser?email=' + ${user.email}}">Edit</a><a class="btn btn-danger" th:href="@{'/deleteUser?email=' + ${user.email}}">Delete</a></td>
 </tr>
 </tbody>
 </table>

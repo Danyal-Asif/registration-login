@@ -13,4 +13,10 @@ public interface UserService {
 	List<UserDto> findAllUsers();
 	
 	void deleteUser(User user);
+	
+	void updateUser(String firstName,String lastName,String email,String password);
+
+	
+
+	
 }

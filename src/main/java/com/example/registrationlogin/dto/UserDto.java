@@ -2,6 +2,7 @@ package com.example.registrationlogin.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Null;
 
 public class UserDto {
 	private Long id;
@@ -12,6 +13,7 @@ public class UserDto {
 	@NotEmpty
 	private String lastName;
 	
+	@Null(message = "Email must be empty", groups = UpdateValidation.class)
 	@NotEmpty(message="Email should not be empty")
 	@Email
 	private String email;

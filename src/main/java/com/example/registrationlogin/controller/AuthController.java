@@ -108,7 +108,6 @@ public class AuthController {
 		if(auth.isAuthenticated()) {
 			String firstName=userDto.getFirstName();
 			String lastName=userDto.getLastName();
-//			String email=userDto.getEmail();
 			String password=newPassword;
 			userService.updateUser(email,firstName, lastName, password);
 			return "redirect:/index?success";
@@ -116,7 +115,6 @@ public class AuthController {
 		}
 		catch(AuthenticationException e){
 			result.rejectValue("password", null,"Incorrect password entered ");
-			String error="Incorrect password entered ";
 			userDto.setEmail(email);
 			model.addAttribute("user", userDto);
 			return "/updateUser";

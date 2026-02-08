@@ -3,14 +3,15 @@ package com.example.registrationlogin.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Size;
 
 public class UserDto {
 	private Long id;
 	
 	@NotEmpty
 	private String firstName;
-	
-	@NotEmpty
+
+	@Size(max = 50)
 	private String lastName;
 	
 	@Null(message = "Email must be empty", groups = UpdateValidation.class)

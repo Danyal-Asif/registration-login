@@ -17,85 +17,91 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	private UserRepository userRepository;
 	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
-	
-	
+
 	public UserServiceImpl(UserRepository userRepository,
 			RoleRepository roleRepository,
-			PasswordEncoder passwordEncoder
-			) {
-		this.userRepository=userRepository;
-		this.roleRepository=roleRepository;
-		this.passwordEncoder=passwordEncoder;
+			PasswordEncoder passwordEncoder) {
+		this.userRepository = userRepository;
+		this.roleRepository = roleRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
-	
+
 	@Override
 	public User findUserByEmail(String email) {
 		// TODO Auto-generated method stub
 		return userRepository.findByEmail(email);
 	}
-	
+
 	@Override
 	public void saveUser(UserDto userDto) {
 		// TODO Auto-generated method stub
-		User user=new User();
-		user.setName(userDto.getFirstName()+" "+userDto.getLastName());
+		User user = new User();
+		user.setName(userDto.getFirstName() + " " + userDto.getLastName());
 		user.setEmail(userDto.getEmail());
 		user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-		Role role=roleRepository.findByName("ROLE_ADMIN");
-		if(role==null) {
-			role=checkRoleExist();
+		Role role = roleRepository.findByName("ROLE_USER");
+		if (role == null) {
+			role = checkRoleExist();
 		}
 		user.setRoles(Arrays.asList(role));
 		userRepository.save(user);
-		
+
 	}
+
 	@Override
 	public void deleteUser(User user) {
 		// TODO Auto-generated method stub
 		userRepository.delete(user);
 	}
+
 	@Override
 	public List<UserDto> findAllUsers() {
 		// TODO Auto-generated method stub
-		List<User> users=userRepository.findAll();
-		return users.stream().map((user)->mapToUserDto(user)).collect(Collectors.toList());
+		List<User> users = userRepository.findAllNonAdminUsers();
+		return users.stream().map((user) -> mapToUserDto(user)).collect(Collectors.toList());
 	}
-	
+
 	private UserDto mapToUserDto(User user) {
-		UserDto userDto=new UserDto();
-		String[] str=user.getName().split(" ");
+		UserDto userDto = new UserDto();
+
+		String[] str = user.getName().split(" ");
+
 		userDto.setFirstName(str[0]);
-		userDto.setLastName(str[1]);
+		if (str.length > 1) {
+			userDto.setLastName(str[1]);
+		} else {
+			userDto.setLastName(""); // or " "
+		}
+
 		userDto.setEmail(user.getEmail());
 		return userDto;
 	}
-	
+
 	private Role checkRoleExist() {
-		Role role=new Role();
-		role.setName("ROLE_ADMIN");
+		Role role = new Role();
+		role.setName("ROLE_USER");
 		return roleRepository.save(role);
 	}
 
 	@Override
 	@Transactional
 	public void updateUser(String email, String firstName, String lastName, String password) {
-	    // Find the user by email
-	    User user = userRepository.findByEmail(email);
-	    if (user != null) {
-	        // Update the user details
-	        user.setName(firstName + " " + lastName);
-	        user.setPassword(passwordEncoder.encode(password));
-	        // Save the updated user
-	        userRepository.save(user);
-	    } else {
-	        // Handle the case where the user does not exist
-	        throw new EntityNotFoundException("User with email " + email + " not found");
-	    }
+		// Find the user by email
+		User user = userRepository.findByEmail(email);
+		if (user != null) {
+			// Update the user details
+			user.setName(firstName + " " + lastName);
+			user.setPassword(passwordEncoder.encode(password));
+			// Save the updated user
+			userRepository.save(user);
+		} else {
+			// Handle the case where the user does not exist
+			throw new EntityNotFoundException("User with email " + email + " not found");
+		}
 	}
 
-	
 }

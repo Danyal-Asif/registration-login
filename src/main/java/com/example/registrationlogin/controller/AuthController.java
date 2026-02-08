@@ -1,5 +1,6 @@
 package com.example.registrationlogin.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,13 @@ public class AuthController {
 		this.userService=userService;
 	}
 	
+	@GetMapping("/welcome")
+public String welcomePage(Model model,Principal principal) {
+	User user=userService.findUserByEmail(principal.getName());
+	model.addAttribute("name",user.getName());
+    return "welcome";
+}
+
 	@GetMapping("/index")
 	public String home() {
 		return "index";
@@ -69,7 +77,7 @@ public class AuthController {
 	}
 	
 	@GetMapping("/users")
-	public String users(Model model) {
+	public String users(Model model,Principal principal) {
 		List<UserDto> users=userService.findAllUsers();
 		model.addAttribute("users",users);
 		return "users";
@@ -134,7 +142,7 @@ public class AuthController {
 				User user=userService.findUserByEmail(userEmail);
 				userService.deleteUser(user);
 				SecurityContextHolder.clearContext();
-				return "redirect:/index?success";
+				return "redirect:/users";
 			}
 		}
 		catch(AuthenticationException e) {
